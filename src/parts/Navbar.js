@@ -16,6 +16,7 @@ import {
   Center,
 } from "@chakra-ui/react";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
+import { useNavigate } from "react-router-dom";
 
 const NavLink = (props) => {
   const { children } = props;
@@ -38,13 +39,21 @@ const NavLink = (props) => {
 };
 
 export default function Navbar() {
+  const navigate = useNavigate();
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
     <>
       <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
-          <Box>Logo</Box>
+          <Box>
+            <img
+            width={'100px'}
+              src="https://branditechture.agency/brand-logos/wp-content/uploads/2022/08/Software-AG-1024x755.png"
+              alt="logo"
+            />
+          </Box>
 
           <Flex alignItems={"center"}>
             <Stack direction={"row"} spacing={7}>
@@ -62,7 +71,9 @@ export default function Navbar() {
                 >
                   <Avatar
                     size={"sm"}
-                    src={"https://avatars.dicebear.com/api/male/username.svg"}
+                    src={
+                      "https://th.bing.com/th/id/OIP.rA8CA2gXV_VluPc8udkwTQHaGB?rs=1&pid=ImgDetMain"
+                    }
                   />
                 </MenuButton>
                 <MenuList alignItems={"center"}>
@@ -70,18 +81,27 @@ export default function Navbar() {
                   <Center>
                     <Avatar
                       size={"2xl"}
-                      src={"https://avatars.dicebear.com/api/male/username.svg"}
+                      src={
+                        "https://th.bing.com/th/id/OIP.rA8CA2gXV_VluPc8udkwTQHaGB?rs=1&pid=ImgDetMain"
+                      }
                     />
                   </Center>
                   <br />
                   <Center>
-                    <p>Username</p>
+                    <p>Noddy Lal</p>
                   </Center>
                   <br />
                   <MenuDivider />
-                  <MenuItem>Your Servers</MenuItem>
-                  <MenuItem>Account Settings</MenuItem>
-                  <MenuItem>Logout</MenuItem>
+                  <MenuItem onClick={() => navigate("/profile")}>
+                    My profile
+                  </MenuItem>
+                  <MenuItem onClick={() => navigate("/addBlog")}>
+                    Add Blog
+                  </MenuItem>
+                  <MenuItem onClick={() => navigate("/myBlogs")}>
+                    My Blogs
+                  </MenuItem>
+                  <MenuItem onClick={() => navigate("/login")}>Logout</MenuItem>
                 </MenuList>
               </Menu>
             </Stack>

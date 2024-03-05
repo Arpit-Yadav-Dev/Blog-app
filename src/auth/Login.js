@@ -10,8 +10,10 @@ import {
   Stack,
   Image,
 } from "@chakra-ui/react";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
+  const navigate = useNavigate();
   return (
     <Stack minH={"100vh"} direction={{ base: "column", md: "row" }}>
       <Flex p={8} flex={1} align={"center"} justify={"center"}>
@@ -32,9 +34,16 @@ export default function Login() {
               justify={"space-between"}
             >
               {/* <Checkbox>Remember me</Checkbox> */}
-              <Text color={"blue.500"}>Already have Account?</Text>
+              <Text color={"blue.500"}>
+                {" "}
+                <Link to={"/"}>Don't have Account?</Link>
+              </Text>
             </Stack>
-            <Button colorScheme={"blue"} variant={"solid"}>
+            <Button
+              onClick={() => navigate("/allBlogs")}
+              colorScheme={"blue"}
+              variant={"solid"}
+            >
               Sign in
             </Button>
           </Stack>
