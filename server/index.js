@@ -43,7 +43,7 @@ const authentication = (req, res, next) => {
 
 // schema
 server.use(cors());
-server.use(express.json()); // for reading body
+server.use(express.json()); // for reading body 
 // making my own custom middleware (application level)
 
 server.use(morgan("default")); // using the third party middleware
