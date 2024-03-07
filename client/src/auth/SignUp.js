@@ -18,6 +18,10 @@ import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { apiList } from "../api/apiList";
+import { useToast } from "@chakra-ui/react";
+import axios from "axios";
+import apiInstance from "../api/apiInstance";
 
 export default function Signup() {
   const {
@@ -26,20 +30,48 @@ export default function Signup() {
     reset,
     formState: { errors, isSubmitting },
   } = useForm();
-  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const toast = useToast();
+  const [showPassword, setShowPassword] = useState(false);
+
+  // function onSubmit(values) {
+  //   return new Promise((resolve) => {
+  //     setTimeout(() => {
+  //       alert(JSON.stringify(values, null, 2));
+  //       resolve();
+  //     }, 3000);
+  //   });
+  // }
 
   function onSubmit(values) {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        alert(JSON.stringify(values, null, 2));
-        resolve();
-      }, 3000);
+    return new Promise((resolve, reject) => {
+      apiInstance
+        .post(apiList.signUp, values)
+        .then((response) => {
+          toast({
+            title: "Account created.",
+            description: "We've created your account for you.",
+            status: "success",
+            duration: 2000,
+            isClosable: true,
+          });
+          resolve();
+          reset();
+          setTimeout(() => {
+            navigate("/login");
+          }, 2000);
+        })
+        .catch((error) => {
+          toast({
+            title: "Sign Up Failed",
+            description: "Try Another Email to login",
+            status: "error",
+            duration: 2000,
+            isClosable: true,
+          });
+          reject();
+        });
     });
-
-    // console.log(values);
-    // reset();
-    // navigate("/login");
   }
 
   return (

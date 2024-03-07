@@ -12,11 +12,14 @@ import {
   InputRightElement,
   FormErrorMessage,
   InputGroup,
+  useToast,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+import apiInstance from "../api/apiInstance";
+import { apiList } from "../api/apiList";
 
 export default function Login() {
   const {
@@ -27,17 +30,38 @@ export default function Login() {
   } = useForm();
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const toast = useToast();
 
   function onSubmit(values) {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        alert(JSON.stringify(values, null, 2));
-        resolve();
-      }, 3000);
+    return new Promise((resolve, reject) => {
+      apiInstance
+        .post(apiList.login, values)
+        .then((response) => {
+          console.log(response);
+          localStorage.setItem("authToken", response.data.token);
+          toast({
+            title: "Welcome User",
+            description: "Login Successfull",
+            status: "success",
+            duration: 2000,
+            isClosable: true,
+          });
+          resolve();
+          setTimeout(() => {
+            navigate("/allBlog");
+          }, 2000);
+        })
+        .catch((error) => {
+          toast({
+            title: "login Failed",
+            description: "Check creadential and Try Again",
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+          });
+          reject();
+        });
     });
-
-    // console.log(values);
-    // reset();
     // navigate("/allBlogs");
   }
 

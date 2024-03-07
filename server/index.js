@@ -51,13 +51,14 @@ server.use("/auth", authRouter.router);
 server.use(express.static(process.env.PUBLIC_DIR)); // this is for giving the file access from public folder files (http://localhost:8080/data.json)
 
 server.use((req, res, next) => {
-  console.log(
-    req.method,
-    req.ip,
-    req.hostname,
-    new Date(),
-    req.get("User-Agent")
-  ); //making a logger for server activities
+  // console.log(
+  //   req.method,
+  //   req.ip,
+  //   req.hostname,
+  //   new Date(),
+  //   req.get("User-Agent")
+  // );
+   //making a logger for server activities
   next(); // use of next to move ahead from middleware otherwise it gets stuck here
 });
 server.use("/products", authentication, productRouter.router); // this is the base url in simple terms
