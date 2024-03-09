@@ -46,7 +46,7 @@ const BlogAuthor = (props) => {
   );
 };
 
-const SingleBlogCard = () => {
+const SingleBlogCard = ({ blog }) => {
   return (
     <Container maxW={"7xl"} p="12">
       <Box
@@ -98,10 +98,11 @@ const SingleBlogCard = () => {
           justifyContent="center"
           marginTop={{ base: "3", sm: "0" }}
         >
-          <BlogTags tags={["Engineering", "Product"]} />
+          <BlogTags tags={[blog.category]} />
+          {/* <BlogTags tags={["Engineering", "Product"]} /> */}
           <Heading marginTop="1">
             <Text textDecoration="none" _hover={{ textDecoration: "none" }}>
-              Blog article title
+              {blog.title}
             </Text>
           </Heading>
           <Text
@@ -110,10 +111,7 @@ const SingleBlogCard = () => {
             color={useColorModeValue("gray.700", "gray.200")}
             fontSize="lg"
           >
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry&apos;s standard dummy
-            text ever since the 1500s, when an unknown printer took a galley of
-            type and scrambled it to make a type specimen book.
+            {blog.description}
           </Text>
           <BlogAuthor name="John Doe" date={new Date("2021-04-06T19:01:27Z")} />
         </Box>

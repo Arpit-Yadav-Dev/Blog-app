@@ -14,19 +14,25 @@ import {
   FormHelperText,
   Image,
   FormErrorMessage,
+  useToast,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { apiList } from "../api/apiList";
+import apiInstance from "../api/apiInstance";
 
 const AddBlog = () => {
   const {
     handleSubmit,
     register,
     reset,
+    getValues,
     formState: { errors, isSubmitting },
   } = useForm();
   const [selectedImage, setSelectedImage] = useState(null);
   const navigate = useNavigate();
+  const toast = useToast();
+
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     const reader = new FileReader();
@@ -38,21 +44,46 @@ const AddBlog = () => {
     if (file) {
       reader.readAsDataURL(file);
     }
+    reset({ ...getValues(), image: event.target.files });
   };
 
   const categories = ["Technology", "Travel", "Food", "Fashion"];
 
   function onSubmit(values) {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        alert(JSON.stringify(values, null, 2));
-        resolve();
-      }, 3000);
-    });
+    const formData = new FormData();
+    formData.append("title", values.title);
+    formData.append("category", values.category);
+    formData.append("description", values.description);
+    formData.append("image", values.image[0]);
 
-    // console.log(values);
-    // reset();
-    // navigate("/myBlogs");
+    return new Promise((resolve, reject) => {
+      apiInstance
+        .post(apiList.addBlog, formData)
+        .then((response) => {
+          toast({
+            title: "Success",
+            description: response.data.message,
+            status: "success",
+            duration: 2000,
+            isClosable: true,
+          });
+          reset();
+          resolve();
+          setTimeout(() => {
+            navigate("/allBlogs");
+          }, 2000);
+        })
+        .catch((error) => {
+          toast({
+            title: "Failed",
+            description: error.message,
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+          });
+          reject();
+        });
+    });
   }
   return (
     <Box p={4}>
@@ -159,6 +190,7 @@ const AddBlog = () => {
                   <FormControl isInvalid={errors.description}>
                     <FormLabel htmlFor="description">Description</FormLabel>
                     <Textarea
+                      rows={6}
                       placeholder="Enter the blog description"
                       {...register("description", {
                         required: "This field is required",

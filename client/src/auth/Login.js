@@ -48,7 +48,7 @@ export default function Login() {
           });
           resolve();
           setTimeout(() => {
-            navigate("/allBlog");
+            navigate("/allBlogs");
           }, 2000);
         })
         .catch((error) => {
