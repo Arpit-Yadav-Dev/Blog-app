@@ -1,10 +1,29 @@
 const model = require("../model/blog");
+const multer = require("multer");
 const mongoose = require("mongoose");
 const Blog = model.Blog;
 
+// multer setup for image upload
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
+exports.createBlogWithImageUpload = (req, res, next) => {
+  upload.single("image")(req, res, (err) => {
+    if (err) {
+      return res.status(400).json({ error: err.message });
+    }
+    next();
+  });
+};
+
 exports.createBlog = async (req, res) => {
-  const blog = new Blog(req.body);
   try {
+    const { title, category, description } = req.body;
+    const image = {
+      data: req.file.buffer,
+      contentType: req.file.mimetype,
+    };
+    const blog = new Blog({ title, category, description, image });
     const savedBlog = await blog.save();
     res.status(201).json({ message: "Blog Added Successfully" });
   } catch (err) {

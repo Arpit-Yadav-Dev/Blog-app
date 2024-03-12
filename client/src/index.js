@@ -1,15 +1,19 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { ChakraProvider } from "@chakra-ui/react";
+import LoadingSpinner from "./loading/LoadingSpinner";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+const LazyApp = lazy(() => import("./App"));
 root.render(
   <React.StrictMode>
     <ChakraProvider>
-      <App />
+      <Suspense fallback={<LoadingSpinner />}>
+        <LazyApp />
+      </Suspense>
     </ChakraProvider>
   </React.StrictMode>
 );

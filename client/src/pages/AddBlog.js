@@ -20,6 +20,7 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { apiList } from "../api/apiList";
 import apiInstance from "../api/apiInstance";
+import axios from "axios";
 
 const AddBlog = () => {
   const {
@@ -39,22 +40,24 @@ const AddBlog = () => {
 
     reader.onloadend = () => {
       setSelectedImage(reader.result);
+      reset({ ...getValues(), image: event.target.files });
     };
 
     if (file) {
       reader.readAsDataURL(file);
     }
-    reset({ ...getValues(), image: event.target.files });
   };
 
   const categories = ["Technology", "Travel", "Food", "Fashion"];
 
   function onSubmit(values) {
+    const { title, category, description, image } = values;
+
     const formData = new FormData();
-    formData.append("title", values.title);
-    formData.append("category", values.category);
-    formData.append("description", values.description);
-    formData.append("image", values.image[0]);
+    formData.append("title", title);
+    formData.append("category", category);
+    formData.append("description", description);
+    formData.append("image", image[0]);
 
     return new Promise((resolve, reject) => {
       apiInstance
